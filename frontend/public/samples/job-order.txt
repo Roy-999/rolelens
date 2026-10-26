@@ -1,0 +1,16 @@
+Job Title: Data Engineer
+Company: Meridian Grove Labs
+Location: Austin, Texas, United States
+Salary: USD 120,000 - 150,000 annually
+
+Summary
+Join Meridian Grove Labs as a Data Engineer. Build reliable systems and collaborate with a small delivery team.
+
+Skills
+Python, SQL, Airflow, dbt, Snowflake
+
+Qualifications
+4+ years of experience
+
+Responsibilities
+Deliver quality work and documentation. Collaborate with the team.

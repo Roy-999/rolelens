@@ -1,0 +1,53 @@
+name: rolelens
+services:
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "127.0.0.1:8080:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/"]
+      interval: 15s
+      timeout: 3s
+      retries: 3
+  backend:
+    build:
+      context: ./backend
+    environment:
+      MONGODB_URI: ${MONGODB_URI:-mongodb://mongo:27017}
+      MONGODB_DB_NAME: ${MONGODB_DB_NAME:-rolelens_demo}
+      AI_MODE: ${AI_MODE:-demo}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_EXTRACTION_MODEL: ${GEMINI_EXTRACTION_MODEL:-gemini-3.5-flash-lite}
+      GEMINI_EMBEDDING_MODEL: ${GEMINI_EMBEDDING_MODEL:-gemini-embedding-2}
+      EMBEDDING_DIMENSIONS: ${EMBEDDING_DIMENSIONS:-768}
+      ATLAS_VECTOR_ENABLED: ${ATLAS_VECTOR_ENABLED:-false}
+      SEED_DEMO: ${SEED_DEMO:-true}
+      GMAIL_ENABLED: ${GMAIL_ENABLED:-false}
+      GMAIL_OAUTH_REDIRECT_URI: http://localhost:8080/auth/callback
+      FRONTEND_REDIRECT_URL: http://localhost:8080
+    volumes:
+      - ./backend/storage:/app/storage
+    depends_on:
+      mongo:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/ready', timeout=4)"]
+      interval: 15s
+      timeout: 5s
+      start_period: 30s
+      retries: 4
+  mongo:
+    image: mongo:7.0
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+volumes:
+  mongo_data:

@@ -1,0 +1,13 @@
+Quinn Taylor
+quinn.taylor@example.com
+Location: Austin, Texas, United States
+6 years of experience
+
+Skills
+Python, SQL, Airflow, dbt, Snowflake
+
+Experience
+Data Engineer at Fictional Fieldstone Studio. Built dependable ingestion pipelines and analytics models.
+
+Languages
+English
